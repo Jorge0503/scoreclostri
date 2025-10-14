@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora SCORE PROPIO Mortalidad C. Difficile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>SCORE PROPIO: Mortalidad en Infección por C. Difficile</h1>
+        <p class="subtitle">Base nacional española. [cite_start]Puntuación total posible: 33 puntos[cite: 3].</p>
+
+        <div id="score-form">
+            <h2>Variables Clínicas y Comorbilidades</h2>
+            
+            <div class="score-group four-points">
+                <h3>4 Puntos</h3>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="4"> Megacolon [cite: 1]
+                </label>
+            </div>
+
+            <div class="score-group three-points">
+                <h3>3 Puntos</h3>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="3"> Shock [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="3"> Sepsis sin shock [cite: 1]
+                </label>
+            </div>
+
+            <div class="score-group two-points">
+                <h3>2 Puntos</h3>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="2"> Malignidad con metástasis [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="2"> Cirrosis hepática [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="2"> Linfoma [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="2"> Leucemia [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="2"> Íleo paralítico [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="2"> Lesión renal aguda (Acute kidney injury) [cite: 1]
+                </label>
+                
+                <div class="age-selector">
+                    <label for="age-select">Edad (por cada 20 años):</label>
+                    <select id="age-select" data-points="2">
+                        <option value="0">0 - 19 años (0 puntos)</option>
+                        [cite_start]<option value="1">20 - 39 años (2 puntos) [cite: 1]</option>
+                        <option value="2">40 - 59 años (4 puntos)</option>
+                        <option value="3">60 - 79 años (6 puntos)</option>
+                        <option value="4">80 - 99 años (8 puntos)</option>
+                        <option value="5">100+ años (10 puntos)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="score-group one-point">
+                <h3>1 Punto</h3>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Insuficiencia cardíaca crónica [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Enfermedad pulmonar crónica [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Malignidad de órgano sólido (sin metástasis) [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Ictus previo (Previous stroke) [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Deterioro cognitivo [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Malnutrición [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Arteriopatía periférica [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Infarto cardíaco previo [cite: 1]
+                </label>
+                <label class="checkbox-label">
+                    [cite_start]<input type="checkbox" data-points="1"> Sexo (masculino) [cite: 1]
+                </label>
+            </div>
+
+            <button onclick="calculateScore()">Calcular Score</button>
+        </div>
+
+        <div id="results-area" class="results-area hidden">
+            <h2>Resultados</h2>
+            <p>Puntuación Total: <span id="total-score">0</span> puntos</p>
+            
+            <div id="risk-group" class="risk-indicator">
+                <p>Grupo de Riesgo: <span id="group-name"></span></p>
+            </div>
+            
+            <p class="mortality-result">
+                Mortalidad Observada Estimada: <strong><span id="mortality-rate">0%</span></strong>
+            </p>
+
+            <p class="cutoff-info">
+                [cite_start]*El punto de corte dicotómico de mayor separación es **9 puntos** (Sensibilidad 0.91, Especificidad 0.40)[cite: 10].
+            </p>
+        </div>
+        
+        <footer>
+            [cite_start]<p>AUC 0.75 (IC 95% 0.74-0.76)[cite: 9].</p>
+            [cite_start]<p>OR por punto: 1.36 (IC 95% 1.35-1.37)[cite: 12].</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
