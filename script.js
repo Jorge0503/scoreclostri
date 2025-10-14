@@ -30,6 +30,10 @@ const riskGroups = [
 ];
 
 function calculateScore() {
+    // --- PRUEBA DE EJECUCIÓN ---
+    alert("¡La función se está ejecutando!"); 
+    // ---------------------------
+
     let totalScore = 0;
     
     // 1. Sumar puntos de Checkboxes
