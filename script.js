@@ -2,33 +2,6 @@
  * Lógica de la Calculadora del SCORE PROPIO de Mortalidad en C. Difficile.
  */
 
-// Datos de Mortalidad Observada y Grupos de Riesgo (Basados en las fuentes 14 y 20)
-const mortalityData = {
-    '0': '0.3%',
-    '1': '0.3%', // Agrupado 0-1
-    '2': '0.6%',
-    '3': '0.6%', // Agrupado 2-3
-    '4': '1.8%',
-    '5': '1.8%', // Agrupado 4-5
-    '6': '2.5%',
-    '7': '6.1%',
-    '8': '7.3%',
-    '9': '10.6%',
-    '10': '14.3%',
-    '11': '17.6%',
-    '12': '23.0%',
-    '13': '28.3%',
-    '14': '33.7%',
-    '15': '39.3%',
-    '16+': '45.8%' // Agrupado 16 o más
-};
-
-const riskGroups = [
-    { maxScore: 6, name: 'Bajo Riesgo', mortality: '<5% (1.9%)', color: '#4CAF50' }, // Verde
-    { maxScore: 10, name: 'Riesgo Medio', mortality: '5-20% (9.7%)', color: '#FF9800' }, // Naranja
-    { maxScore: Infinity, name: 'Alto Riesgo', mortality: '>20% (25.5%)', color: '#F44336' } // Rojo
-];
-
 function calculateScore() {
     // --- PRUEBA DE EJECUCIÓN ---
     alert("¡La función se está ejecutando!"); 
@@ -86,4 +59,31 @@ function calculateScore() {
     
     // Desplazarse hacia los resultados
     document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
+     
+   // Datos de Mortalidad Observada y Grupos de Riesgo (Basados en las fuentes 14 y 20)
+const mortalityData = {
+    '0': '0.3%',
+    '1': '0.3%', // Agrupado 0-1
+    '2': '0.6%',
+    '3': '0.6%', // Agrupado 2-3
+    '4': '1.8%',
+    '5': '1.8%', // Agrupado 4-5
+    '6': '2.5%',
+    '7': '6.1%',
+    '8': '7.3%',
+    '9': '10.6%',
+    '10': '14.3%',
+    '11': '17.6%',
+    '12': '23.0%',
+    '13': '28.3%',
+    '14': '33.7%',
+    '15': '39.3%',
+    '16+': '45.8%' // Agrupado 16 o más
+};
+
+const riskGroups = [
+    { maxScore: 6, name: 'Bajo Riesgo', mortality: '<5% (1.9%)', color: '#4CAF50' }, // Verde
+    { maxScore: 10, name: 'Riesgo Medio', mortality: '5-20% (9.7%)', color: '#FF9800' }, // Naranja
+    { maxScore: Infinity, name: 'Alto Riesgo', mortality: '>20% (25.5%)', color: '#F44336' } // Rojo
+];
 }
