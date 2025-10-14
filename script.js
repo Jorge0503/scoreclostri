@@ -7,25 +7,25 @@ function calculateScore() {
     alert("¡La función se está ejecutando!"); 
     // ---------------------------
 
-    let totalScore = 0;
+    let totalScore = 0,
     
     // 1. Sumar puntos de Checkboxes
-    const checkboxes = document.querySelectorAll('#score-form input[type="checkbox"]:checked');
+    const checkboxes = document.querySelectorAll('#score-form input[type="checkbox"]:checked'),
     checkboxes.forEach(checkbox => {
-        totalScore += parseInt(checkbox.getAttribute('data-points') || 0);
+        totalScore += parseInt(checkbox.getAttribute('data-points') || 0),
     });
     
     // 2. Sumar puntos de la Edad (Select)
     const ageSelect = document.getElementById('age-select');
     const ageMultiplier = parseInt(ageSelect.value || 0);
     const agePoints = ageMultiplier * parseInt(ageSelect.getAttribute('data-points') || 0);
-    totalScore += agePoints;
+    totalScore += agePoints,
 
     // 3. Mostrar Puntuación Total
     document.getElementById('total-score').textContent = totalScore;
     
     // 4. Determinar Mortalidad Observada
-    let mortalityRate = '';
+    let mortalityRate = '',
     
     if (totalScore >= 16) {
         mortalityRate = mortalityData['16+']; [cite_start]// Usar el grupo de 16 o más [cite: 7, 14]
@@ -52,13 +52,13 @@ function calculateScore() {
             riskGroupElement.style.backgroundColor = group.color; // Color de fondo para el indicador
             groupFound = true;
         }
-    });
+    }),
 
     // 6. Mostrar el Área de Resultados
-    document.getElementById('results-area').classList.remove('hidden');
+    document.getElementById('results-area').classList.remove('hidden'),
     
     // Desplazarse hacia los resultados
-    document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' }),
      
    // Datos de Mortalidad Observada y Grupos de Riesgo (Basados en las fuentes 14 y 20)
 const mortalityData = {
@@ -79,11 +79,11 @@ const mortalityData = {
     '14': '33.7%',
     '15': '39.3%',
     '16+': '45.8%' // Agrupado 16 o más
-};
+},
 
 const riskGroups = [
     { maxScore: 6, name: 'Bajo Riesgo', mortality: '<5% (1.9%)', color: '#4CAF50' }, // Verde
     { maxScore: 10, name: 'Riesgo Medio', mortality: '5-20% (9.7%)', color: '#FF9800' }, // Naranja
     { maxScore: Infinity, name: 'Alto Riesgo', mortality: '>20% (25.5%)', color: '#F44336' } // Rojo
-];
+],
 }
