@@ -1,6 +1,5 @@
 /**
  * Lógica de la Calculadora del SCORE PROPIO de Mortalidad en C. Difficile.
- * Datos de Mortalidad Observada y Grupos de Riesgo (Fuentes 14 y 20).
  */
 
 // =================================================================
@@ -9,11 +8,11 @@
 
 const mortalityData = {
     '0': '0.3%',
-    [cite_start]'1': '0.3%', // Agrupado 0-1 [cite: 14]
+    '1': '0.3%', 
     '2': '0.6%',
-    [cite_start]'3': '0.6%', // Agrupado 2-3 [cite: 14]
+    '3': '0.6%', 
     '4': '1.8%',
-    [cite_start]'5': '1.8%', // Agrupado 4-5 [cite: 14]
+    '5': '1.8%', 
     '6': '2.5%',
     '7': '6.1%',
     '8': '7.3%',
@@ -24,7 +23,7 @@ const mortalityData = {
     '13': '28.3%',
     '14': '33.7%',
     '15': '39.3%',
-    [cite_start]'16+': '45.8%' // Agrupado 16 o más [cite: 7, 14]
+    '16+': '45.8%' // Agrupado 16 o más [cite: 14, 7]
 };
 
 const riskGroups = [
@@ -62,7 +61,7 @@ function calculateScore() {
     if (totalScore >= 16) {
         mortalityRate = mortalityData['16+']; 
     } else if (totalScore >= 0) {
-        [cite_start]// Manejar agrupaciones específicas [cite: 14]
+        [cite_start]// Manejar agrupaciones específicas basadas en la tabla de mortalidad [cite: 14]
         if (totalScore <= 1) mortalityRate = mortalityData['0']; 
         else if (totalScore <= 3 && totalScore >= 2) mortalityRate = mortalityData['2']; 
         else if (totalScore <= 5 && totalScore >= 4) mortalityRate = mortalityData['4']; 
