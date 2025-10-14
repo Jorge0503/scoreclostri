@@ -27,9 +27,9 @@ const mortalityData = {
 };
 
 const riskGroups = [
-    [cite_start]{ maxScore: 6, name: 'Bajo Riesgo', mortality: '<5% (1.9%)', color: '#4CAF50' }, // Verde [cite: 20]
-    [cite_start]{ maxScore: 10, name: 'Riesgo Medio', mortality: '5-20% (9.7%)', color: '#FF9800' }, // Naranja [cite: 20]
-    [cite_start]{ maxScore: Infinity, name: 'Alto Riesgo', mortality: '>20% (25.5%)', color: '#F44336' } // Rojo [cite: 20]
+    { maxScore: 6, name: 'Bajo Riesgo', mortality: '<5% (1.9%)', color: '#4CAF50' }, // Verde [cite: 20]
+    { maxScore: 10, name: 'Riesgo Medio', mortality: '5-20% (9.7%)', color: '#FF9800' }, // Naranja [cite: 20]
+    { maxScore: Infinity, name: 'Alto Riesgo', mortality: '>20% (25.5%)', color: '#F44336' } // Rojo [cite: 20]
 ];
 
 
