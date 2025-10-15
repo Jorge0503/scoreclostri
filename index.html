@@ -5,49 +5,41 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Score mortalidad - C. difficile (Calculadora)</title>
 <meta name="description" content="Calculadora online del score de mortalidad hospitalaria para pacientes ingresados con Clostridioides difficile.">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  /* --- Reset y tipografía limpia --- */
   :root{
     --bg:#f6f8fb;
     --card:#ffffff;
     --muted:#6b7280;
-    --accent:#0ea5a4; /* teal-ish */
+    --accent:#0ea5a4;
     --accent-dark:#0b7f7d;
     --success:#10b981;
     --warn:#f59e0b;
     --danger:#ef4444;
-    --shadow: 0 6px 20px rgba(14, 165, 164, 0.08);
-    --glass: rgba(255,255,255,0.7);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    --shadow:0 6px 20px rgba(14,165,164,0.08);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
   }
   html,body{height:100%;margin:0;background:linear-gradient(180deg,#eef2f6 0%,var(--bg) 100%);color:#111827}
   .container{max-width:980px;margin:32px auto;padding:20px;}
   header{display:flex;gap:16px;align-items:center;margin-bottom:18px}
-  .logo{
-    width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:var(--shadow)
-  }
+  .logo{width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:var(--shadow)}
   h1{font-size:20px;margin:0}
   p.lead{margin:4px 0 0;color:var(--muted);font-size:14px}
   .grid{display:grid;grid-template-columns:1fr 380px;gap:20px}
-  @media (max-width:900px){.grid{grid-template-columns:1fr}}
-  /* Card */
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
   .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
   .section-title{font-weight:600;margin-bottom:12px;color:#0f172a}
-  /* Form styles */
   .vars{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-  @media (max-width:640px){.vars{grid-template-columns:1fr}}
+  @media(max-width:640px){.vars{grid-template-columns:1fr}}
   .var{display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.04)}
   .var input[type="checkbox"]{width:18px;height:18px}
-  .var .label{font-size:14px}
   .muted-small{font-size:13px;color:var(--muted)}
   .age-row{display:flex;gap:10px;align-items:center;margin:8px 0}
-  input[type="number"]{padding:8px;border-radius:8px;border:1px solid #e6e9ee;width:120px}
-  select{padding:8px;border-radius:8px;border:1px solid #e6e9ee}
+  input[type="number"],select{padding:8px;border-radius:8px;border:1px solid #e6e9ee;width:120px}
   .actions{display:flex;gap:8px;margin-top:12px}
   button{cursor:pointer;border:0;padding:10px 14px;border-radius:10px;font-weight:600}
   .btn-primary{background:linear-gradient(180deg,var(--accent),var(--accent-dark));color:white;box-shadow:0 8px 20px rgba(11,127,125,0.12)}
   .btn-ghost{background:transparent;border:1px solid #e6e9ee;color:#0f172a}
-  /* Result box */
   .result{display:flex;flex-direction:column;gap:10px;align-items:stretch}
   .score-big{font-size:40px;font-weight:800;letter-spacing:-1px}
   .risk-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;color:white}
@@ -57,232 +49,149 @@
   .mini{font-size:13px;color:var(--muted)}
   .explain{font-size:14px;color:#0f172a;line-height:1.4}
   .footer-note{font-size:12px;color:var(--muted);margin-top:10px}
-  .small-foot{font-size:11px;color: #475569; margin-top:14px; border-top:1px dashed #e6edf3; padding-top:12px}
-  /* accessibility focus */
-  :focus{outline:3px solid rgba(14,165,164,0.18);outline-offset:2px}
+  .charts-section{margin-top:50px}
+  canvas{background:#fff;border-radius:10px;box-shadow:var(--shadow);padding:10px}
+  footer{margin-top:30px;text-align:center;color:var(--muted);font-size:13px}
+  .wide-card{margin-top:30px;background:var(--card);padding:20px;border-radius:12px;box-shadow:var(--shadow)}
 </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">CD</div>
-      <div>
-        <h1>Calculadora de riesgo de mortalidad para pacientes ingresados con <em>Clostridioides difficile</em></h1>
-        <p class="lead">Los parámetros de validación y comparación están en el pie.</p>
+<div class="container">
+  <header>
+    <div class="logo">CD</div>
+    <div>
+      <h1>Calculadora de riesgo de mortalidad para pacientes ingresados con <em>Clostridioides difficile</em></h1>
+      <p class="lead">Incluye estimación específica, calibración y validación del modelo.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="section-title">Variables del score</div>
+      <div class="muted-small">Marca cada factor presente en el ingreso.</div>
+
+      <div class="age-row"><label class="muted-small">Edad (años)</label>
+        <input id="age" type="number" min="0" max="130" value="70">
+        <span class="muted-small">2 puntos cada 20 años</span>
       </div>
-    </header>
+      <div style="margin-bottom:12px">
+        <label class="muted-small">Sexo</label>
+        <select id="sex"><option value="female">Femenino (+0)</option><option value="male" selected>Masculino (+1)</option></select>
+      </div>
 
-    <div class="grid">
-      <!-- LEFT: Form -->
-      <div class="card" aria-labelledby="vars-title">
-        <div id="vars-title" class="section-title">VARIABLES DEL SCORE</div>
+      <div class="vars" id="vars-list">
+        <div class="var"><input type="checkbox" data-pts="4"><label>Megacolon (+4)</label></div>
+        <div class="var"><input type="checkbox" data-pts="3"><label>Shock (+3)</label></div>
+        <div class="var"><input type="checkbox" data-pts="3"><label>Sepsis sin shock (+3)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Íleo paralítico (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Insuficiencia renal aguda (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Cirrhosis hepática (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Neoplasia metastásica (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Linfoma o leucemia (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Insuficiencia cardíaca crónica (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Cardiopatía isquémica (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Enfermedad arterial periférica (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>EPOC u otra enfermedad pulmonar crónica (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Ictus previo (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Deterioro cognitivo (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Desnutrición (+1)</label></div>
+      </div>
 
-        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
-          <div class="muted-small">Marca cada factor presente en el ingreso.</div>
-        </div>
-
-        <div style="margin-bottom:10px">
-          <label class="muted-small">Edad (años)</label>
-          <div class="age-row">
-            <input id="age" type="number" min="0" max="130" value="70" aria-label="Edad en años">
-            <div class="muted-small">La puntuación por edad es <strong>2 puntos por cada 20 años</strong></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:12px">
-          <label class="muted-small">Sexo</label>
-          <div style="display:flex;gap:8px;margin-top:6px">
-            <select id="sex" aria-label="Sexo">
-              <option value="female">Femenino (+0)</option>
-              <option value="male" selected>Masculino (+1)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="vars" id="vars-list" aria-live="polite">
-          <!-- cada .var contiene un checkbox y el texto con puntos -->
-          <div class="var"><input type="checkbox" id="v_megacolon" data-pts="4"><label for="v_megacolon" class="label">Megacolon <span class="muted-small">(+4)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_shock" data-pts="3"><label for="v_shock" class="label">Shock <span class="muted-small">(+3)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_sepsis" data-pts="3"><label for="v_sepsis" class="label">Sepsis sin shock <span class="muted-small">(+3)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_paralytic" data-pts="2"><label for="v_paralytic" class="label">Íleo paralítico <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_aki" data-pts="2"><label for="v_aki" class="label">Insuficiencia renal aguda <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_mets" data-pts="2"><label for="v_mets" class="label">Neoplasia solida con metastasis <span class="muted-small">(+3)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_solid" data-pts="1"><label for="v_solid" class="label">Neoplasia solida maligna sin metastasis<span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_lymph" data-pts="2"><label for="v_lymph" class="label">Neoplasia hematologica maligna <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_liver" data-pts="2"><label for="v_liver" class="label">Cirrhosis hepática <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_chf" data-pts="1"><label for="v_chf" class="label">Insuficiencia cardíaca crónica <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_mi" data-pts="1"><label for="v_mi" class="label">Cardiopatía isquemica <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_pad" data-pts="1"><label for="v_pad" class="label">Enfermedad arterial periférica <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_copd" data-pts="1"><label for="v_copd" class="label">Enfermedad pulmonar crónica <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_stroke" data-pts="1"><label for="v_stroke" class="label">Ictus previo <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_cog" data-pts="1"><label for="v_cog" class="label">Deterioro cognitivo <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_maln" data-pts="1"><label for="v_maln" class="label">Desnutrición <span class="muted-small">(+1)</span></label></div>      
-        </div>
-
-        <div class="actions">
-          <button id="btn-calc" class="btn-primary" aria-label="Calcular score">Calcular</button>
-          <button id="btn-reset" class="btn-ghost" aria-label="Limpiar formulario">Limpiar</button>
-        </div>
-
-      <!-- RIGHT: Result / interpretation -->
-      <aside class="card">
-        <div class="section-title">Resultado</div>
-        <div id="result-area" class="result" aria-live="polite">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div class="mini">Puntuación total</div>
-              <div id="score" class="score-big">—</div>
-            </div>
-            <div style="text-align:right">
-              <div class="mini">Grupo de riesgo</div>
-              <div id="riskBadge" class="risk-pill risk-low">—</div>
-            </div>
-          </div>
-
-          <div id="estimate" class="explain">Introduce datos y pulsa <strong>Calcular</strong>.</div>
-
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <div class="card" style="padding:10px;border-radius:8px;flex:1">
-              <div class="mini">Intervalo orientativo (según categorización)</div>
-              <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
-                <li><strong>Bajo (0–6)</strong>: riesgo <5% (aprox. 1.9%)</li>
-                <li><strong>Intermedio (7–10)</strong>: riesgo 5–20% (aprox. 9.7%)</li>
-                <li><strong>Alto (≥11)</strong>: riesgo >20% (aprox. 25.5%)</li>
-              </ul>
-            </div>
-
-            <div class="card" style="padding:10px;border-radius:8px;flex:1">
-              <div class="mini">Punto de corte sugerido</div>
-              <div style="margin-top:6px;font-weight:700">≥9 puntos → riesgo mortalidad superior al 15%</div>
-              <div style="margin-top:6px;font-weight:700"><9 puntos → riesgo mortalidad inferior a 5%</div>
-            </div>
-          </div>
-
-          <div class="small-foot" id="small-foot">
-            <strong>Nota (validación, calibración y comparación):</strong>
-            <div style="margin-top:8px">El score se desarrolló en una base nacional con N=66.224 ingresos.</div>
-            <div style="margin-top:8px">AUC 0.75 (IC 95% 0.74–0.76). Punto J = 9 puntos (sensibilidad 0.91, especificidad 0.40).</div>.
-            <div style="margin-top:8px">Brier score 0.953 (BSS0.12). Spielgelhalter Z-statistic 0.9012, p=0.184.</div>.
-          </div>
-
-        </div>
-      </aside>
+      <div class="actions">
+        <button id="btn-calc" class="btn-primary">Calcular</button>
+        <button id="btn-reset" class="btn-ghost">Limpiar</button>
+      </div>
+      <div class="footer-note">Herramienta de apoyo clínico. No sustituye juicio médico.</div>
     </div>
 
-    <footer style="margin-top:16px;text-align:center;color:var(--muted);font-size:13px">
-      <div>Herramienta de ayuda para estimación de riesgo de mortalidad. No sustituye juicio clínico.</div>
-    </footer>
+    <aside class="card">
+      <div class="section-title">Resultado</div>
+      <div class="result">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div class="mini">Puntuación total</div><div id="score" class="score-big">—</div></div>
+          <div style="text-align:right"><div class="mini">Grupo de riesgo</div><div id="riskBadge" class="risk-pill risk-low">—</div></div>
+        </div>
+        <div id="estimate" class="explain">Introduce datos y pulsa <strong>Calcular</strong>.</div>
+        <div id="specific-risk" class="mini" style="margin-top:8px;color:#0f172a"></div>
+      </div>
+    </aside>
   </div>
 
+  <div class="wide-card charts-section">
+    <h2 style="font-size:18px;margin-top:0">Validación y calibración del modelo</h2>
+    <canvas id="calibChart" height="260"></canvas>
+    <canvas id="mortChart" height="260" style="margin-top:30px"></canvas>
+    <div class="muted-small" style="margin-top:10px">
+      AUC 0.75 (IC 95% 0.74–0.76). Punto J=9 (Sens 0.91, Esp 0.40). Brier 0.953. Spielgelhalter Z=0.9012 (p=0.18). 
+      Basado en cohorte nacional de 66.224 ingresos por <em>C. difficile</em>.
+    </div>
+  </div>
+
+  <footer>Desarrollado por equipo investigador nacional en infecciones por <em>Clostridioides difficile</em>.</footer>
+</div>
+
 <script>
-  // Elementos
-  const btnCalc = document.getElementById('btn-calc');
-  const btnReset = document.getElementById('btn-reset');
-  const scoreEl = document.getElementById('score');
-  const estimateEl = document.getElementById('estimate');
-  const riskBadge = document.getElementById('riskBadge');
-  const smallFoot = document.getElementById('small-foot');
+const btnCalc=document.getElementById('btn-calc');
+const btnReset=document.getElementById('btn-reset');
+const scoreEl=document.getElementById('score');
+const estimateEl=document.getElementById('estimate');
+const riskBadge=document.getElementById('riskBadge');
+const specRisk=document.getElementById('specific-risk');
 
-  // Helper: suma puntos de checkboxes y edad/sexo
-  function calculateScore(){
-    let total = 0;
-    // checkboxes
-    const checks = document.querySelectorAll('#vars-list input[type="checkbox"]');
-    checks.forEach(ch => {
-      if(ch.checked){
-        const pts = Number(ch.dataset.pts) || 0;
-        total += pts;
-      }
-    });
-    // edad: 2 puntos por cada 20 años completos
-    const age = Number(document.getElementById('age').value) || 0;
-    const ageBlocks = Math.floor(age / 20);
-    total += ageBlocks * 2;
+// Riesgo específico de mortalidad por punto
+const mortalityByScore={0:0.3,1:0.3,2:0.6,3:0.6,4:1.8,5:1.8,6:2.5,7:6.1,8:7.3,9:10.6,10:14.3,11:17.6,12:23.0,13:28.3,14:33.7,15:39.3,16:45.8};
 
-    // sexo: masculino +1
-    const sex = document.getElementById('sex').value;
-    if(sex === 'male') total += 1;
+// Calibración predicho/observado (deciles)
+const calibPred=[1.83,4.02,6.63,7.35,7.35,9.85,13.08,17.15,22.17,36.99];
+const calibObs=[1.39,2.52,7.04,7.25,7.25,10.63,14.31,17.57,22.97,35.16];
 
-    return { total, age, ageBlocks };
-  }
+// Mortalidad observada por puntuación
+const mortScores=Object.keys(mortalityByScore).map(Number);
+const mortValues=Object.values(mortalityByScore);
 
-  function interpret(total){
-    // grupos: 0-6 bajo, 7-10 intermedio, >=11 alto
-    let groupLabel = '';
-    let badgeClass = '';
-    let riskText = '';
-    if(total <= 6){
-      groupLabel = 'Bajo';
-      badgeClass = 'risk-low';
-      riskText = 'Riesgo estimado: <strong> Mortalidad inferior a 5% </strong> (categoría bajo riesgo).';
-    } else if(total <= 10){
-      groupLabel = 'Intermedio';
-      badgeClass = 'risk-mid';
-      riskText = 'Riesgo estimado: <strong> MOrtalidad entre 5-20% </strong> (categoría intermedia).';
-    } else {
-      groupLabel = 'Alto';
-      badgeClass = 'risk-high';
-      riskText = 'Riesgo estimado: <strong> Mortalidad superior a 20% </strong> (categoría alto riesgo).';
-    }
-
-    // además mostrar OR por punto y por 5 puntos (datos del estudio)
-    const orPerPoint = 1.36; // (95% CI 1.35-1.37)
-    const orPer5 = 3.42; // (95% CI 3.30-3.50)
-    const orPhrase = `<div class="muted-small" style="margin-top:6px">OR por punto: ${orPerPoint.toFixed(2)}; OR por 5 puntos: ${orPer5.toFixed(2)}.</div>`;
-
-    return { groupLabel, badgeClass, riskText, orPhrase };
-  }
-
-  function render(){
-    const { total, age, ageBlocks } = calculateScore();
-
-    // Mostrar puntuación
-    scoreEl.innerText = total;
-
-    // Interpretación
-    const itp = interpret(total);
-
-    // Update badge
-    riskBadge.innerText = itp.groupLabel;
-    riskBadge.className = 'risk-pill ' + (itp.badgeClass || 'risk-low');
-
-    // Estimate block
-    const ageNote = `<div class="mini" style="margin-top:6px">Edad: ${age} años → bloques de 20: ${ageBlocks} (sumados ${ageBlocks*2} puntos).</div>`;
-    estimateEl.innerHTML = `
-      <div style="font-weight:600">${itp.riskText}</div>
-      ${ageNote}
-      ${itp.orPhrase}
-      <div class="muted-small" style="margin-top:8px">Use esta estimación como apoyo al juicio clínico; la puntuación fue obtenida en cohortes hospitalarias de pacientes ingresados con un primer episodio de diarrea por Clostridioides difficile.</div>
-    `;
-  }
-
-  btnCalc.addEventListener('click', (e)=>{
-    e.preventDefault();
-    render();
-    // small animation focus
-    scoreEl.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:420});
+function calculateScore(){
+  let total=0;
+  document.querySelectorAll('#vars-list input[type="checkbox"]').forEach(ch=>{
+    if(ch.checked) total+=Number(ch.dataset.pts);
   });
+  const age=Math.floor(Number(document.getElementById('age').value)/20)*2;
+  const sex=document.getElementById('sex').value==='male'?1:0;
+  return total+age+sex;
+}
 
-  btnReset.addEventListener('click',(e)=>{
-    e.preventDefault();
-    // reset all checkboxes
-    const checks = document.querySelectorAll('#vars-list input[type="checkbox"]');
-    checks.forEach(ch => ch.checked = false);
-    document.getElementById('age').value = 70;
-    document.getElementById('sex').value = 'male';
-    scoreEl.innerText = '—';
-    riskBadge.innerText = '—';
-    riskBadge.className = 'risk-pill risk-low';
-    estimateEl.innerHTML = 'Introduce datos y pulsa <strong>Calcular</strong>.';
-  });
+function interpret(total){
+  let g='',cls='',txt='';
+  if(total<=6){g='Bajo';cls='risk-low';txt='Riesgo estimado <5% (categoría bajo riesgo).';}
+  else if(total<=10){g='Intermedio';cls='risk-mid';txt='Riesgo estimado 5–20% (categoría intermedia).';}
+  else{g='Alto';cls='risk-high';txt='Riesgo estimado >20% (categoría alto riesgo).';}
+  return{g,cls,txt};
+}
 
-  // Accessibility: calculate on Enter when focus is on numeric input
-  document.getElementById('age').addEventListener('keydown', (ev)=>{
-    if(ev.key === 'Enter'){ render(); }
-  });
+function render(){
+  const total=calculateScore();
+  scoreEl.innerText=total;
+  const itp=interpret(total);
+  riskBadge.innerText=itp.g;
+  riskBadge.className='risk-pill '+itp.cls;
+  const specific=mortalityByScore[total]!==undefined?mortalityByScore[total]:mortalityByScore[16];
+  estimateEl.innerHTML=`<strong>${itp.txt}</strong>`;
+  specRisk.innerHTML=`Riesgo específico estimado: <strong>${specific.toFixed(1)}%</strong>`;
+}
 
-  // Calculate initial default
-  render();
+btnCalc.onclick=e=>{e.preventDefault();render();scoreEl.animate([{transform:'scale(1)'},{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:420});};
+btnReset.onclick=e=>{e.preventDefault();document.querySelectorAll('#vars-list input').forEach(ch=>ch.checked=false);document.getElementById('age').value=70;document.getElementById('sex').value='male';scoreEl.innerText='—';riskBadge.innerText='—';riskBadge.className='risk-pill risk-low';estimateEl.innerHTML='Introduce datos y pulsa <strong>Calcular</strong>.';specRisk.innerHTML='';};
+
+// Gráficas
+const ctx1=document.getElementById('calibChart');
+new Chart(ctx1,{type:'line',data:{labels:calibPred.map((_,i)=>'Decil '+(i+1)),datasets:[
+  {label:'Predicho (%)',data:calibPred,borderColor:'#0ea5a4',fill:false,tension:0.3},
+  {label:'Observado (%)',data:calibObs,borderColor:'#f59e0b',fill:false,tension:0.3}
+]},options:{plugins:{legend:{display:true,position:'top'}},scales:{y:{beginAtZero:true,title:{display:true,text:'Mortalidad (%)'}}}}});
+
+const ctx2=document.getElementById('mortChart');
+new Chart(ctx2,{type:'line',data:{labels:mortScores.map(x=>x.toString()),datasets:[
+  {label:'Mortalidad observada (%)',data:mortValues,borderColor:'#0b7f7d',backgroundColor:'#0ea5a4',tension:0.3,fill:false,pointRadius:4}
+]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'% Mortalidad'}},x:{title:{display:true,text:'Puntuación total'}}}}});
 </script>
 </body>
 </html>
