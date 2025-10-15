@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Score mortalidad - C. difficile (Calculadora)</title>
-<meta name="description" content="Calculadora online del score de mortalidad hospitalaria para ingreso por Clostridioides difficile.">
+<meta name="description" content="Calculadora online del score de mortalidad hospitalaria para pacientes ingresados con Clostridioides difficile.">
 <style>
   /* --- Reset y tipografía limpia --- */
   :root{
@@ -67,15 +67,15 @@
     <header>
       <div class="logo">CD</div>
       <div>
-        <h1>Calculadora de riesgo de mortalidad — ingreso por <em>Clostridioides difficile</em></h1>
-        <p class="lead">Interfaz tipo MDCalc: rápido, claro y pensado para uso clínico. Los parámetros de validación y comparación están en el pie, en letra pequeña.</p>
+        <h1>Calculadora de riesgo de mortalidad para pacientes ingresados con <em>Clostridioides difficile</em></h1>
+        <p class="lead">Los parámetros de validación y comparación están en el pie.</p>
       </div>
     </header>
 
     <div class="grid">
       <!-- LEFT: Form -->
       <div class="card" aria-labelledby="vars-title">
-        <div id="vars-title" class="section-title">Variables del score</div>
+        <div id="vars-title" class="section-title">VARIABLES DEL SCORE</div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
           <div class="muted-small">Marca cada factor presente en el ingreso.</div>
@@ -85,7 +85,7 @@
           <label class="muted-small">Edad (años)</label>
           <div class="age-row">
             <input id="age" type="number" min="0" max="130" value="70" aria-label="Edad en años">
-            <div class="muted-small">La puntuación por edad es <strong>2 puntos por cada 20 años completos</strong> (ej. 0–19 = 0, 20–39 = 2, 40–59 = 4, ...)</div>
+            <div class="muted-small">La puntuación por edad es <strong>2 puntos por cada 20 años</strong></div>
           </div>
         </div>
 
@@ -93,8 +93,8 @@
           <label class="muted-small">Sexo</label>
           <div style="display:flex;gap:8px;margin-top:6px">
             <select id="sex" aria-label="Sexo">
-              <option value="female">Femenino</option>
-              <option value="male" selected>Masculino (+1 punto)</option>
+              <option value="female">Femenino (+0)</option>
+              <option value="male" selected>Masculino (+1)</option>
             </select>
           </div>
         </div>
@@ -104,29 +104,25 @@
           <div class="var"><input type="checkbox" id="v_megacolon" data-pts="4"><label for="v_megacolon" class="label">Megacolon <span class="muted-small">(+4)</span></label></div>
           <div class="var"><input type="checkbox" id="v_shock" data-pts="3"><label for="v_shock" class="label">Shock <span class="muted-small">(+3)</span></label></div>
           <div class="var"><input type="checkbox" id="v_sepsis" data-pts="3"><label for="v_sepsis" class="label">Sepsis sin shock <span class="muted-small">(+3)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_mets" data-pts="2"><label for="v_mets" class="label">Neoplasia metastásica <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_liver" data-pts="2"><label for="v_liver" class="label">Cirrhosis hepática <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_lymph" data-pts="2"><label for="v_lymph" class="label">Linfoma <span class="muted-small">(+2)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_leuk" data-pts="2"><label for="v_leuk" class="label">Leucemia <span class="muted-small">(+2)</span></label></div>
           <div class="var"><input type="checkbox" id="v_paralytic" data-pts="2"><label for="v_paralytic" class="label">Íleo paralítico <span class="muted-small">(+2)</span></label></div>
           <div class="var"><input type="checkbox" id="v_aki" data-pts="2"><label for="v_aki" class="label">Insuficiencia renal aguda <span class="muted-small">(+2)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_mets" data-pts="2"><label for="v_mets" class="label">Neoplasia solida con metastasis <span class="muted-small">(+3)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_solid" data-pts="1"><label for="v_solid" class="label">Neoplasia solida maligna sin metastasis<span class="muted-small">(+1)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_lymph" data-pts="2"><label for="v_lymph" class="label">Neoplasia hematologica maligna <span class="muted-small">(+2)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_liver" data-pts="2"><label for="v_liver" class="label">Cirrhosis hepática <span class="muted-small">(+2)</span></label></div>
           <div class="var"><input type="checkbox" id="v_chf" data-pts="1"><label for="v_chf" class="label">Insuficiencia cardíaca crónica <span class="muted-small">(+1)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_mi" data-pts="1"><label for="v_mi" class="label">Cardiopatía isquemica <span class="muted-small">(+1)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_pad" data-pts="1"><label for="v_pad" class="label">Enfermedad arterial periférica <span class="muted-small">(+1)</span></label></div>
           <div class="var"><input type="checkbox" id="v_copd" data-pts="1"><label for="v_copd" class="label">Enfermedad pulmonar crónica <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_solid" data-pts="1"><label for="v_solid" class="label">Neoplasia sólida (sin metástasis) <span class="muted-small">(+1)</span></label></div>
           <div class="var"><input type="checkbox" id="v_stroke" data-pts="1"><label for="v_stroke" class="label">Ictus previo <span class="muted-small">(+1)</span></label></div>
           <div class="var"><input type="checkbox" id="v_cog" data-pts="1"><label for="v_cog" class="label">Deterioro cognitivo <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_maln" data-pts="1"><label for="v_maln" class="label">Desnutrición <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_pad" data-pts="1"><label for="v_pad" class="label">Enfermedad arterial periférica <span class="muted-small">(+1)</span></label></div>
-          <div class="var"><input type="checkbox" id="v_mi" data-pts="1"><label for="v_mi" class="label">Infarto de miocardio previo <span class="muted-small">(+1)</span></label></div>
+          <div class="var"><input type="checkbox" id="v_maln" data-pts="1"><label for="v_maln" class="label">Desnutrición <span class="muted-small">(+1)</span></label></div>      
         </div>
 
         <div class="actions">
           <button id="btn-calc" class="btn-primary" aria-label="Calcular score">Calcular</button>
           <button id="btn-reset" class="btn-ghost" aria-label="Limpiar formulario">Limpiar</button>
         </div>
-
-        <div class="footer-note">Uso previsto: herramienta de ayuda para estimación de riesgo. No sustituye juicio clínico.</div>
-      </div>
 
       <!-- RIGHT: Result / interpretation -->
       <aside class="card">
@@ -157,16 +153,16 @@
 
             <div class="card" style="padding:10px;border-radius:8px;flex:1">
               <div class="mini">Punto de corte sugerido</div>
-              <div style="margin-top:6px;font-weight:700">Corte dicotómico: ≥9 puntos → mayor riesgo (18.6% observado en la cohorte)</div>
+              <div style="margin-top:6px;font-weight:700">≥9 puntos → riesgo mortalidad superior al 15%</div>
+              <div style="margin-top:6px;font-weight:700"><9 puntos → riesgo mortalidad inferior a 5%</div>
             </div>
           </div>
 
           <div class="small-foot" id="small-foot">
             <strong>Nota (validación, calibración y comparación):</strong>
-            <div style="margin-top:8px">
-              El score se desarrolló en una base nacional con N=66.224 ingresos. AUC 0.75 (IC 95% 0.74–0.76). Punto J = 9 puntos (sensibilidad 0.91, especificidad 0.40).<br>
-              Comparación con CARDS (Kassam et al.) mostró AUC menor (0.625). Para detalles completos y parámetros de calibración (Brier, Spiegelhalter, deciles, etc.) consulte la referencia original o el repositorio asociado.
-            </div>
+            <div style="margin-top:8px">El score se desarrolló en una base nacional con N=66.224 ingresos.</div>
+            <div style="margin-top:8px">AUC 0.75 (IC 95% 0.74–0.76). Punto J = 9 puntos (sensibilidad 0.91, especificidad 0.40).</div>.
+            <div style="margin-top:8px">Brier score 0.953 (BSS0.12). Spielgelhalter Z-statistic 0.9012, p=0.184.</div>.
           </div>
 
         </div>
@@ -174,8 +170,7 @@
     </div>
 
     <footer style="margin-top:16px;text-align:center;color:var(--muted);font-size:13px">
-      <div>Hecho para uso clínico y educativo. Diseñado para ser publicado en GitHub Pages / Netlify.</div>
-      <div style="margin-top:6px">Si quieres, genero también el README con instrucciones de despliegue.</div>
+      <div>Herramienta de ayuda para estimación de riesgo de mortalidad. No sustituye juicio clínico.</div>
     </footer>
   </div>
 
@@ -219,20 +214,20 @@
     if(total <= 6){
       groupLabel = 'Bajo';
       badgeClass = 'risk-low';
-      riskText = 'Riesgo estimado: <strong>~1.9%</strong> (categoría bajo riesgo).';
+      riskText = 'Riesgo estimado: <strong>< 5% mortalidad</strong> (categoría bajo riesgo).';
     } else if(total <= 10){
       groupLabel = 'Intermedio';
       badgeClass = 'risk-mid';
-      riskText = 'Riesgo estimado: <strong>~9.7%</strong> (categoría intermedia).';
+      riskText = 'Riesgo estimado: <strong>5-20% de mortalidad</strong> (categoría intermedia).';
     } else {
       groupLabel = 'Alto';
       badgeClass = 'risk-high';
-      riskText = 'Riesgo estimado: <strong>~25.5%</strong> (categoría alto riesgo).';
+      riskText = 'Riesgo estimado: <strong>> 20% mortalidad</strong> (categoría alto riesgo).';
     }
 
     // además mostrar OR por punto y por 5 puntos (datos del estudio)
-    const orPerPoint = 1.36;
-    const orPer5 = 3.42;
+    const orPerPoint = 1.36; (95% CI 1.35-1.37)
+    const orPer5 = 3.42; (95% CI 3.30-3.50)
     const orPhrase = `<div class="muted-small" style="margin-top:6px">OR por punto: ${orPerPoint.toFixed(2)}; OR por 5 puntos: ${orPer5.toFixed(2)}.</div>`;
 
     return { groupLabel, badgeClass, riskText, orPhrase };
@@ -257,7 +252,7 @@
       <div style="font-weight:600">${itp.riskText}</div>
       ${ageNote}
       ${itp.orPhrase}
-      <div class="muted-small" style="margin-top:8px">Interpretación: use esta estimación como apoyo al juicio clínico; la puntuación fue obtenida en cohortes hospitalarias.</div>
+      <div class="muted-small" style="margin-top:8px">Use esta estimación como apoyo al juicio clínico; la puntuación fue obtenida en cohortes hospitalarias de pacientes ingresados con un primer episodio de diarrea por Clostridioides difficile.</div>
     `;
   }
 
