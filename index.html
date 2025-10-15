@@ -61,7 +61,7 @@
     <div class="logo">CD</div>
     <div>
       <h1>Calculadora de riesgo de mortalidad para pacientes ingresados con <em>Clostridioides difficile</em></h1>
-      <p class="lead">Incluye estimación específica, calibración y validación del modelo.</p>
+      <p class="lead">Herramienta supleemntaria de apoyo al juicio clinico..</p>
     </div>
   </header>
 
@@ -81,17 +81,17 @@
 
       <div class="vars" id="vars-list">
         <div class="var"><input type="checkbox" data-pts="4"><label>Megacolon (+4)</label></div>
-        <div class="var"><input type="checkbox" data-pts="3"><label>Shock (+3)</label></div>
-        <div class="var"><input type="checkbox" data-pts="3"><label>Sepsis sin shock (+3)</label></div>
+        <div class="var"><input type="checkbox" data-pts="3"><label>Shock o sepsis grave con disfunción organica(+3)</label></div>
         <div class="var"><input type="checkbox" data-pts="2"><label>Íleo paralítico (+2)</label></div>
         <div class="var"><input type="checkbox" data-pts="2"><label>Insuficiencia renal aguda (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Neoplasia solida metastásica (+3)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Neoplasia solida sin metastasis (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Neoplasia hematologica maligna (+2)</label></div>
         <div class="var"><input type="checkbox" data-pts="2"><label>Cirrhosis hepática (+2)</label></div>
-        <div class="var"><input type="checkbox" data-pts="2"><label>Neoplasia metastásica (+2)</label></div>
-        <div class="var"><input type="checkbox" data-pts="2"><label>Linfoma o leucemia (+2)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Insuficiencia cardíaca crónica (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Cardiopatía isquémica (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Enfermedad arterial periférica (+1)</label></div>
-        <div class="var"><input type="checkbox" data-pts="1"><label>EPOC u otra enfermedad pulmonar crónica (+1)</label></div>
+        <div class="var"><input type="checkbox" data-pts="1"><label>Neumopatía crónica (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Ictus previo (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Deterioro cognitivo (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Desnutrición (+1)</label></div>
@@ -114,6 +114,21 @@
         <div id="estimate" class="explain">Introduce datos y pulsa <strong>Calcular</strong>.</div>
         <div id="specific-risk" class="mini" style="margin-top:8px;color:#0f172a"></div>
       </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div class="card" style="padding:10px;border-radius:8px;flex:1">
+              <div class="mini">Intervalos de riesgo</div>
+              <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
+                <li><strong>Bajo (0–6)</strong>: riesgo <5%</li>
+                <li><strong>Intermedio (7–10)</strong>: riesgo 5–20%</li>
+                <li><strong>Alto (≥11)</strong>: riesgo >20%</li>
+              </ul>
+            </div>
+            <div class="card" style="padding:10px;border-radius:8px;flex:1">
+              <div class="mini">Punto de corte</div>
+              <div style="margin-top:6px;font-weight:700">Corte dicotómico: ≥9 puntos → Alto riesgo, mortalidad superior a 15%</div>
+              <div style="margin-top:6px;font-weight:700">Corte dicotómico: ≥8 puntos → Bajo riesgo, mortalidad inferior a 5%</div>
+            </div>
+      </div>
     </aside>
   </div>
 
@@ -121,13 +136,13 @@
     <h2 style="font-size:18px;margin-top:0">Validación y calibración del modelo</h2>
     <canvas id="calibChart" height="260"></canvas>
     <canvas id="mortChart" height="260" style="margin-top:30px"></canvas>
-    <div class="muted-small" style="margin-top:10px">
+    <div class="muted-small" style="margin-top:14px">
       AUC 0.75 (IC 95% 0.74–0.76). Punto J=9 (Sens 0.91, Esp 0.40). Brier 0.953. Spielgelhalter Z=0.9012 (p=0.18). 
-      Basado en cohorte nacional de 66.224 ingresos por <em>C. difficile</em>.
+      Basado en cohorte nacional de 66.224 ingresos por <em>C. difficile</em>. Pendiente de validación externa
     </div>
   </div>
 
-  <footer>Desarrollado por equipo investigador nacional en infecciones por <em>Clostridioides difficile</em>.</footer>
+  <footer>Desarrollado por equipo investigador nacional en infecciones por <em>Clostridioides difficile</em>. del Hospital Universitario Puerta de Hierro, Majadahonda</footer>
 </div>
 
 <script>
@@ -139,7 +154,7 @@ const riskBadge=document.getElementById('riskBadge');
 const specRisk=document.getElementById('specific-risk');
 
 // Riesgo específico de mortalidad por punto
-const mortalityByScore={0:0.3,1:0.3,2:0.6,3:0.6,4:1.8,5:1.8,6:2.5,7:6.1,8:7.3,9:10.6,10:14.3,11:17.6,12:23.0,13:28.3,14:33.7,15:39.3,16:45.8};
+const mortalityByScore={0:0.3,1:0.3,2:0.6,3:0.6,4:1.8,5:1.8,6:2.5,7:6,8:7,9:10,10:14,11:17,12:23,13:28,14:33,15:39,16:45,17;50};
 
 // Calibración predicho/observado (deciles)
 const calibPred=[1.83,4.02,6.63,7.35,7.35,9.85,13.08,17.15,22.17,36.99];
