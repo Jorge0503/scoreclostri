@@ -214,20 +214,20 @@
     if(total <= 6){
       groupLabel = 'Bajo';
       badgeClass = 'risk-low';
-      riskText = 'Riesgo estimado: <strong>< 5% mortalidad</strong> (categoría bajo riesgo).';
+      riskText = 'Riesgo estimado: <strong> Mortalidad inferior a 5% </strong> (categoría bajo riesgo).';
     } else if(total <= 10){
       groupLabel = 'Intermedio';
       badgeClass = 'risk-mid';
-      riskText = 'Riesgo estimado: <strong>5-20% de mortalidad</strong> (categoría intermedia).';
+      riskText = 'Riesgo estimado: <strong> MOrtalidad entre 5-20% </strong> (categoría intermedia).';
     } else {
       groupLabel = 'Alto';
       badgeClass = 'risk-high';
-      riskText = 'Riesgo estimado: <strong>> 20% mortalidad</strong> (categoría alto riesgo).';
+      riskText = 'Riesgo estimado: <strong> Mortalidad superior a 20% </strong> (categoría alto riesgo).';
     }
 
     // además mostrar OR por punto y por 5 puntos (datos del estudio)
-    const orPerPoint = 1.36; (95% CI 1.35-1.37)
-    const orPer5 = 3.42; (95% CI 3.30-3.50)
+    const orPerPoint = 1.36; // (95% CI 1.35-1.37)
+    const orPer5 = 3.42; // (95% CI 3.30-3.50)
     const orPhrase = `<div class="muted-small" style="margin-top:6px">OR por punto: ${orPerPoint.toFixed(2)}; OR por 5 puntos: ${orPer5.toFixed(2)}.</div>`;
 
     return { groupLabel, badgeClass, riskText, orPhrase };
