@@ -84,10 +84,10 @@
         <div class="var"><input type="checkbox" data-pts="3"><label>Shock o sepsis grave con disfunción organica (+3)</label></div>
         <div class="var"><input type="checkbox" data-pts="2"><label>Íleo paralítico (+2)</label></div>
         <div class="var"><input type="checkbox" data-pts="2"><label>Insuficiencia renal aguda (+2)</label></div>
-        <div class="var"><input type="checkbox" data-pts="2"><label>Cirrhosis hepática (+2)</label></div>
         <div class="var"><input type="checkbox" data-pts="3"><label>Neoplasia solida metastásica (+3)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Neoplasia solida sin metastasis (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="2"><label>Neoplasia hematologica maligna (+2)</label></div>
+        <div class="var"><input type="checkbox" data-pts="2"><label>Cirrhosis hepática (+2)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Insuficiencia cardíaca crónica (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Cardiopatía isquémica (+1)</label></div>
         <div class="var"><input type="checkbox" data-pts="1"><label>Enfermedad arterial periférica (+1)</label></div>
@@ -113,6 +113,22 @@
         </div>
         <div id="estimate" class="explain">Introduce datos y pulsa <strong>Calcular</strong>.</div>
         <div id="specific-risk" class="mini" style="margin-top:8px;color:#0f172a"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div class="card" style="padding:10px;border-radius:8px;flex:1">
+              <div class="mini">Intervalo orientativo (según categorización)</div>
+              <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
+                <li><strong>Bajo</strong>:(riesgo <5%)</li>
+                <li><strong>Intermedio (7–10)</strong>:(riesgo 5–20%)</li>
+                <li><strong>Alto (≥11)</strong>:(riesgo >20%)</li>
+              </ul>
+            </div>
+
+            <div class="card" style="padding:10px;border-radius:8px;flex:1">
+              <div class="mini">Punto de corte sugerido</div>
+              <div style="margin-top:6px;font-weight:700">Corte dicotómico: 9 o más puntos → riesgo mortalidad elevado (superior a 15%)</div>
+              <div style="margin-top:6px;font-weight:700">Corte dicotómico: 8 o menos puntos → riesgo mortalidad bajo (inferior a 5%)</div>
+            </div>
+          </div>
       </div>
     </aside>
   </div>
@@ -123,7 +139,7 @@
     <canvas id="mortChart" height="260" style="margin-top:30px"></canvas>
     <div class="muted-small" style="margin-top:10px">
       AUC 0.75 (IC 95% 0.74–0.76). Punto J=9 (Sens 0.91, Esp 0.40). Brier 0.953. Spielgelhalter Z=0.9012 (p=0.18). 
-      Basado en cohorte nacional de 66.224 ingresos por <em>C. difficile</em>.
+      Basado en cohorte nacional de 66.224 ingresos por <em>C. difficile</em>. Pendiente de validación externa
     </div>
   </div>
 
